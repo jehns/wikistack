@@ -1,8 +1,9 @@
 const express = require('express');
 const Router = express.Router();
+const addPage = require('../views/addPage.js');
 
 Router.get('/', (req, res) => {
-  res.send('hello');
+  res.redirect('../');
 });
 
 Router.post('/', (req, res) => {
@@ -10,7 +11,7 @@ Router.post('/', (req, res) => {
 });
 
 Router.get('/add', (req, res) => {
-  res.send('add working');
+  res.send(addPage());
 });
 
 module.exports = Router;
