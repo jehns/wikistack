@@ -1,13 +1,20 @@
 const morgan = require('morgan');
 const express = require('express');
 const app = express();
+const layoutView = require('./views/layout.js')
+const { db } = require('./models');
+
+db.authenticate().
+then(() => {
+  console.log('connected to the database');
+})
 
 app.use(morgan('dev'));
-// app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.send('hello world');
+  res.send(layoutView());
 });
 
 const PORT = 3000;
