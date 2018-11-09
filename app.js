@@ -1,8 +1,12 @@
 const morgan = require('morgan');
 const express = require('express');
-const app = express();
-const layoutView = require('./views/layout.js')
+const layout = require('./views/layout.js')
 const { db } = require('./models');
+const models = require('./models');
+const app = express();
+
+app.use('/wiki', require('./routes/wiki'));
+app.use('/user', require('./routes/user'));
 
 db.authenticate().
 then(() => {
@@ -14,10 +18,18 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  res.send(layoutView());
+  res.send(layout(''));
 });
 
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`server connected on port ${PORT}`);
-});
+const init = async () => {
+  // await models.User.sync();
+  // await models.Page.sync();
+  await models.db.sync({ force: true });
+  // start server
+  app.listen(PORT, () => {
+    console.log(`server is listening on port ${PORT}`);
+  });
+}
+
+init();
