@@ -5,6 +5,9 @@ const { db } = require('./models');
 const models = require('./models');
 const app = express();
 
+app.use(express.static(__dirname + '/public'));
+app.use(express.urlencoded({ extended: false }));
+app.use(morgan('dev'));
 app.use('/wiki', require('./routes/wiki'));
 app.use('/user', require('./routes/user'));
 
@@ -12,10 +15,6 @@ db.authenticate().
 then(() => {
   console.log('connected to the database');
 })
-
-app.use(morgan('dev'));
-app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
   res.send(layout(''));

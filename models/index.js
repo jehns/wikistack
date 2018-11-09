@@ -21,6 +21,18 @@ const Page = db.define('page', {
   }
 });
 
+function generateSlug(title) {
+  if(!title) {
+    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8);
+  } else {
+    return title.replace(/\s+/gi, '_').replace(/\W/gi, '');
+  }
+}
+
+Page.beforeValidate((pageInstance, optionsObject) => {
+  pageInstance.slug = generateSlug(pageInstance.title);
+});
+
 const User = db.define('user', {
   name: {
     type: Sequelize.STRING,
